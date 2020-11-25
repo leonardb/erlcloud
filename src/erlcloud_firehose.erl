@@ -47,9 +47,9 @@
          put_record/3,
          put_record/4,
 
-         put_record_batch/2,
-         put_record_batch/3,
-         put_record_batch/4,
+         put_records/2,
+         put_records/3,
+         put_records/4,
 
          update_destination/2,
          update_destination/3,
@@ -183,19 +183,19 @@ put_record(StreamName, Data, Options, #aws_config{} = Config) ->
             {<<"Record">>, [{<<"Data">>, encode(Options, Data)}]}],
     erlcloud_kinesis_impl:request(firehose, Config, ?OP_PUT_ONE, Json).
 
--spec put_record_batch(binary(), payload()) ->
+-spec put_records(binary(), payload()) ->
                               {ok, proplist()} | {error, any()}.
-put_record_batch(StreamName, Data) ->
-    put_record_batch(StreamName, Data, [], ?DEFAULT_CONFIG).
+put_records(StreamName, Data) ->
+    put_records(StreamName, Data, [], ?DEFAULT_CONFIG).
 
--spec put_record_batch(binary(), payload(), aws_config()) ->
+-spec put_records(binary(), payload(), aws_config()) ->
                               {ok, proplist()} | {error, any()}.
-put_record_batch(StreamName, Data, #aws_config{} = Config) ->
-    put_record_batch(StreamName, Data, [], Config).
+put_records(StreamName, Data, #aws_config{} = Config) ->
+    put_records(StreamName, Data, [], Config).
 
--spec put_record_batch(binary(), payload(), proplist(), aws_config()) ->
+-spec put_records(binary(), payload(), proplist(), aws_config()) ->
                               {ok, proplist()} | {error, any()}.
-put_record_batch(StreamName, Data, Options, #aws_config{} = Config) ->
+put_records(StreamName, Data, Options, #aws_config{} = Config) ->
     FormatData = [[{<<"Data">>, encode(Options, D)}] || D <- Data],
     Json = [{<<"DeliveryStreamName">>, StreamName},
             {<<"Records">>, FormatData}],
