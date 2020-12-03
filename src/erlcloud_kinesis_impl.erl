@@ -170,7 +170,7 @@ headers(RequestType, Config, Operation, Body) ->
     Headers = [{"host", Host},
                {"x-amz-target", Operation}],
     Region = erlcloud_aws:aws_region_from_host(Host),
-    Service = erlang:atom_to_list(RequestType),
+    Service = service(RequestType),
     erlcloud_aws:sign_v4_headers(Config, Headers, Body, Region, Service).
 
 url(stream, #aws_config{kinesis_scheme = Scheme, kinesis_host = Host} = Config) ->
@@ -199,3 +199,8 @@ retry_fun(firehose, #aws_config{firehose_retry = Retry}) ->
 
 decode(<<>>) -> [];
 decode(JSON) -> jsx:decode(JSON, [{return_maps, false}]).
+
+service(stream) ->
+    "kinesis";
+service(firehose) ->
+    "firehose".
